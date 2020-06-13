@@ -1,5 +1,5 @@
 export const origin = {
-    'production': 'https://ethereumpm.netlify.app',
+    'production': 'https://ethereumpm.com',
     'development': 'http://localhost:7010'
 }[getEnvironment()];
 
@@ -9,7 +9,7 @@ export const ethereumNetwork = {
 }[getEnvironment()];
 
 function getEnvironment() {
-    if (window.location.hostname === 'ethereumpm.netlify.app') {
+    if (window.location.hostname === 'ethereumpm.com') {
         return 'production';
     }
     else {
