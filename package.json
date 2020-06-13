@@ -1,0 +1,30 @@
+{
+  "name": "ethereum-pm",
+  "version": "0.0.0",
+  "description": "Ethereum private messaging dapp",
+  "dependencies": {
+    "eciesjs": "0.3.6",
+    "ethers": "5.0.0-beta.192",
+    "lit-html": "1.2.1",
+    "reduxular": "0.0.6"
+  },
+  "devDependencies": {
+    "browserify": "16.5.1",
+    "zwitterion": "0.45.0"
+  },
+  "scripts": {
+    "start": "zwitterion --port 7010",
+    "build-eciesjs": "npx browserify node_modules/eciesjs/dist/index.js -o test.js --s eciesjs"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/lastmjs/ethereum-pm.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/lastmjs/ethereum-pm/issues"
+  },
+  "homepage": "https://github.com/lastmjs/ethereum-pm#readme"
+}
