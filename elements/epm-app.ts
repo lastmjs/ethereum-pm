@@ -2,6 +2,7 @@ import { html, render as litRender } from 'lit-html';
 import { createObjectStore } from 'reduxular';
 import { ethers } from 'ethers';
 import '../test.js';
+import { origin } from '../modules/constants';
 
 const ethersProvider = ethers.getDefaultProvider('ropsten');
 
@@ -61,7 +62,7 @@ class EPMApp extends HTMLElement {
 
         const swarmHash = await setSwarmContent(encryptedMessageSerialized);
 
-        this.store.messageHyperlink = `http://localhost:7010/?swarm-hash=${swarmHash}`;
+        this.store.messageHyperlink = `${origin}?swarm-hash=${swarmHash}`;
 
         await sendMessageNotificationTransaction(`0x${this.store.senderEthereumPrivateKey}`, this.store.receiverEthereumAddress, swarmHash);
     }
@@ -83,7 +84,8 @@ class EPMApp extends HTMLElement {
             <a href="/oss-attribution/attribution.txt" target="_blank">Open Source</a>
 
             <h2>This is a prototype that is violating major security best practices</h2>
-            <h2>Be careful of using this on the Ethereum main network</h2>
+            <h2>Only runs on Ropsten for now</h2>
+            <h2>Never entire a private key into this app with real funds</h2>
 
             <div>
                 <div>Your Ethereum private key:</div>
