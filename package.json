@@ -10,11 +10,14 @@
   },
   "devDependencies": {
     "browserify": "16.5.1",
+    "oss-attribution-generator": "1.7.1",
     "zwitterion": "0.45.0"
   },
   "scripts": {
     "start": "zwitterion --port 7010",
-    "build-eciesjs": "npx browserify node_modules/eciesjs/dist/index.js -o test.js --s eciesjs"
+    "build": "zwitterion --port 7010 --build-static --exclude node_modules --include lit-html,reduxular,redux/es,ethers/dist",
+    "build-eciesjs": "npx browserify node_modules/eciesjs/dist/index.js -o test.js --s eciesjs",
+    "install": "generate-attribution"
   },
   "repository": {
     "type": "git",

@@ -30,7 +30,6 @@ const InitialState: Readonly<State> = {
     messageHyperlink: persistedState === 'NOT_FOUND' ? '' : persistedState.messageHyperlink
 };
 
-// TODO we need to store the serialized and encrypted message and swarm, and then retrieve it when possible
 class EPMApp extends HTMLElement {
 
     readonly store = createObjectStore(InitialState, (state: Readonly<State>) => litRender(this.render(state), this), this);
@@ -48,50 +47,23 @@ class EPMApp extends HTMLElement {
 
             this.store.messageToReceiveDecrypted = messageToReceiveDecryptedString;
         }
+
+        // const ethereumPM1 = new ethers.Wallet(`0x62B29D1AE19BF09856447A165E1DD4EE802726BAF3CDBA38250860B6460921C6`);
+        // const ethereumPM2 = new ethers.Wallet(`0xC18C04743326DB70FF0FB43014B295E3234E7BCB81FF1F4077B4C9CEF9810D9D`);  
+
+        // console.log(ethereumPM1.publicKey);
+        // console.log(ethereumPM2.publicKey);
     }
 
     async sendClicked() {
-        // const receiverEthereumPublicKey: string = await deriveEthereumPublicKeyFromEthereumAddress(this.store.receiverEthereumAddress);
-    
-        // console.log('receiverEthereumPublicKey', receiverEthereumPublicKey);
-    
-        const ethereumPM1 = new ethers.Wallet(`0x62B29D1AE19BF09856447A165E1DD4EE802726BAF3CDBA38250860B6460921C6`);
-        const ethereumPM2 = new ethers.Wallet(`0xC18C04743326DB70FF0FB43014B295E3234E7BCB81FF1F4077B4C9CEF9810D9D`);  
-        
-        // window.decrypt(k1.toHex(), window.encrypt(k1.publicKey.toHex(), data)).toString()
-
-        // console.log(encryptMessage(ethereumPM2.publicKey, 'hello').toString());
-
-        // const message = this.querySelector('#send-a-message-textarea').value;
-
-        const encryptedMessageUint8Array = encryptMessage(ethereumPM1.publicKey, this.store.messageToSend);
+        const encryptedMessageUint8Array = encryptMessage(this.store.receiverEthereumPublicKey, this.store.messageToSend);
         const encryptedMessageSerialized = serializeUint8Array(encryptedMessageUint8Array);
 
         const swarmHash = await setSwarmContent(encryptedMessageSerialized);
 
-        // console.log('swarmHash', swarmHash);
-
         this.store.messageHyperlink = `http://localhost:7010/?swarm-hash=${swarmHash}`;
 
-        await sendMessageNotificationTransaction(ethereumPM2.privateKey, ethereumPM1.address, swarmHash);
-
-        // const encryptedMessageDeserialized = deserializeUint8Array(encryptedMessageSerialized);
-
-        // const decryptedMessageUint8Array = decryptMessage(ethereumPM2.privateKey, encryptedMessageDeserialized);
-        // const decryptedMessageString = new TextDecoder('utf-8').decode(decryptedMessageUint8Array);
-
-        // console.log('decryptedMessageString', decryptedMessageString);
-
-
-        // console.log(decryptMessage(ethereumPM2.privateKey, encryptedMessageUint8Array));
-
-        // console.log();
-
-        // console.log(decryptMessage(ethereumPM2.privateKey, encryptMessage(ethereumPM2.publicKey, 'hello')))
-
-        // console.log(new TextDecoder("utf-8").decode(window.eciesjs.decrypt(ethereumPM2.privateKey, window.eciesjs.encrypt(ethereumPM2.publicKey, 'hello'))));
-
-        // console.log(ethereumPM1.publicKey)
+        await sendMessageNotificationTransaction(`0x${this.store.senderEthereumPrivateKey}`, this.store.receiverEthereumAddress, swarmHash);
     }
 
     render(state: Readonly<State>) {
@@ -107,6 +79,8 @@ class EPMApp extends HTMLElement {
             </style>
 
             <h1>Ethereum PM - Private messaging with Ethereum and Swarm</h1>
+
+            <a href="/oss-attribution/attribution.txt" target="_blank">Open Source</a>
 
             <h2>This is a prototype that is violating major security best practices</h2>
             <h2>Be careful of using this on the Ethereum main network</h2>
@@ -128,6 +102,16 @@ class EPMApp extends HTMLElement {
                     type="text"
                     .value=${state.receiverEthereumAddress}
                     @input=${(e: any) => this.store.receiverEthereumAddress = e.target.value}
+                >
+
+                <br>
+                <br>
+
+                <div>Recipent's Ethereum public key (will derive from address in the future):</div>
+                <input
+                    type="text"
+                    .value=${state.receiverEthereumPublicKey}
+                    @input=${(e: any) => this.store.receiverEthereumPublicKey = e.target.value}
                 >
             </div>
 
