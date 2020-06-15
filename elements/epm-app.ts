@@ -269,7 +269,10 @@ class EPMApp extends HTMLElement {
                             class="epm-app-input"
                             type="text"
                             .value=${state.receiverEthereumAddress}
-                            @input=${(e: any) => this.store.receiverEthereumAddress = e.target.value}
+                            @input=${(e: any) => {
+                                this.store.receiverEthereumAddress = e.target.value;
+                                this.store.receiverEthereumPublicKey = '';
+                            }}
                         >
                     </div>
         
