@@ -329,7 +329,7 @@ async function deriveEthereumPublicKeyFromEthereumAddress(ethereumAddress: strin
     const transactionResponses: ReadonlyArray<ethers.providers.TransactionResponse> = await etherscanProvider.getHistory(ethereumAddress);
 
     const aSignedTransaction: Readonly<ethers.providers.TransactionResponse> | undefined = transactionResponses.find((transactionResponse: Readonly<ethers.providers.TransactionResponse>) => {
-        return transactionResponse.from === ethereumAddress;
+        return transactionResponse.from.toLowerCase() === ethereumAddress.toLowerCase();
     });
 
     if (aSignedTransaction === undefined) {
